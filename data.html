@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> My Homepage</title>
+</head>
+<body>
+<h2>Hello {{ name }}!</h2>
+<h2>Hello {{ city }}!</h2>
+<h2>Hello {{ country }}!</h2>
+
+<div align="center">
+            <table>
+                <h1>
+                <!--Displaying the converted table-->
+                     {% for table in tables %}
+                    <h2>{{titles[loop.index]}}</h2>                            
+                    {{ table|safe }}
+                    {% endfor %}     
+                </h1> 
+            </table>
+        </div>
+		
+</body>
+</html> 
