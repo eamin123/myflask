@@ -1,0 +1,85 @@
+root@raspberrypi:/home/pi# cat /var/www/mrtg/mysearch.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> My Homepage search</title>
+</head>
+<body>
+
+<form name="search" action="/cgi-bin/mytext.py" method="get">
+Search: <input type="text" name="searchbox">
+<input type="submit" value="Submit">
+</form>
+
+
+
+</body>
+</html>
+
+root@raspberrypi:/home/pi# cat /var/www/cgi-bin/mytext.py
+#!/usr/bin/python3
+
+import cgi
+import cgitb
+import sys
+import pandas as pd
+import csv
+from pretty_html_table import build_table
+
+myver = sys.version
+form = cgi.FieldStorage()
+name2 = form.getvalue('searchbox')
+name = "mpls"
+data = pd.read_csv('/home/pi/ACX-RLI-Query.csv')
+data2 = data[data['Synopsis'].str.contains(name,case=False)]
+data3 = data2[["record_number","Synopsis"]]
+mytable = build_table(data3, 'blue_light')
+
+cgitb.enable()
+
+
+print ('Content-type: text/html\n\n')
+print ('<h1>Python Script Test %s </h1>' % (myver))
+print ('<h1>Python Script Test %s </h1>' % (name))
+print (mytable)
+
+root@raspberrypi:/home/pi# cat /var/www/cgi-bin/mytext2.py
+#!/usr/bin/python3
+
+import cgi
+import csv
+import pandas as pd
+from pretty_html_table import build_table
+import cgi
+import cgitb
+cgitb.enable()
+
+
+form = cgi.FieldStorage()
+#name =  form.getvalue('searchbox')
+name = "mpls"
+#df = pd.read_csv('ACX-RLI-Query.csv')
+#df.to_csv('ACX-RLI-Query.csv', index=None)
+data = pd.read_csv('/home/pi/ACX-RLI-Query.csv')
+data2 = data[data['Synopsis'].str.contains(name,case=False)]
+data3 = data2[["record_number","Synopsis"]]
+output = build_table(data3, 'blue_light')
+
+print ("Content-type:text/html\r\n\r\n")
+print ('<html>')
+print ('<head>')
+print ('<title>Hello World - First CGI Program</title>')
+print ('</head>')
+print ('<body>')
+print ('<h2>Hello World! This is my first CGI program</h2>')
+
+print (output)
+
+
+print ('</body>')
+print ('</html>')
+
+
+
+root@raspberrypi:/home/pi# 55370
